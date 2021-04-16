@@ -5,9 +5,8 @@ void createDict() {
 		cout << "err";
 	}
 	else {
-		char str[100];
-		for (int i = 0; i < 94; i++) {
-			fOut << (char)(i+32) <<" ->"<< toBinary(i) << endl;
+		for (int i = 0; i < 223; i++) {
+			fOut << (char)(i+32) <<" ->"<< i << endl;
 		}
 		
 	}
