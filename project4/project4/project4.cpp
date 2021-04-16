@@ -22,11 +22,10 @@ int main(int argc, char* argv[])
 		while (!dictF.eof()) {
 			getline(dictF, str);
 			if (str != "") {
-			dict[str.substr(0, 1)] = str.substr(4);
-
+				dict[str.substr(0, 1)] = str.substr(4);
 			}
 		}
-
+		dict["\n"] = to_string(223);
 		
 		/*for (int i = 0; it != dict.end(); it++, i++) {
 			cout << it->first << " -> " << it->second << endl;
@@ -36,53 +35,52 @@ int main(int argc, char* argv[])
 	//createDict();
 	map <string, string>::iterator it = dict.begin();
 	string str1 = argv[1];//compress/decompress/err
+	//string str1 = "--compress";
 	if (str1 == "--compress") {
 		string path = "../project4/";
 		string pathFile = path + argv[2];
+		//string pathFile = path + "file.txt";
 		ifstream f(pathFile);
 		if (!f.is_open()) {
 			cout << "No such file";
 		}
 		else {
-			string str; getline(f, str);
+			string str=""; 
 			string P = "", C, PnC;
 			string result;
-			/*
-			* str = abaababccd
-				1.	P=
-					C=a
-					PnC=a (1.)
-				2.	P=a
-					C=b
-					P+c=ab (2. добавить в словарь,)
-				3.	P=b
-					C=a
-					P+C=ba
-				///////////
-				1. Если PnC есть => nextStep -> P=PnC , C++;
-				2.Если PnC нету => добавить в map с value++, и для всех символом кроме последнего выписать  value из map; P=C; C++;
-			*/
-			int counter = 222;
 			int bytesnum = 0;
-			for (int i = 0; i < str.length(); i++) {
-				C = str.substr(i, 1);
-				PnC = P + C;
-				if (dict.count(PnC) == 1) {
-					P = PnC;
-					continue;
+			int counter = 223;
+			while (!f.eof()) {
+				getline(f, str);
+				str = str + "\n";
+				for (int i = 0; i < str.length(); i++) {
+					C = str.substr(i, 1);
+					PnC = P + C;
+					if (dict.count(PnC) == 1) {
+						P = PnC;
+						continue;//4
+					}
+					else {
+						dict[PnC] = to_string(++counter);
+						it = dict.find(P);
+						result += it->second;
+						result += " ";
+						bytesnum++;
+						P = C;
+					}
 				}
-				else {
-					dict[PnC] = to_string(++counter);
-					it = dict.find(P);
+				if (str.substr(str.length() - 1, 1) != "\n") {
+					it = dict.find(str.substr(str.length() - 1, 1));
 					result += it->second;
-					result += " ";
 					bytesnum++;
-					P = C;
 				}
+				
+				/*if (!f.eof()) {
+					result += "^";
+				}*/
 			}
-			it = dict.find(str.substr(str.length() - 1, 1));
-			result += it->second;
-			bytesnum++;
+			
+			
 
 			cout << result<<endl<<endl<<bytesnum;
 			cout << endl << "NEW DICTIONARY:  " << endl;
