@@ -5,4 +5,4 @@
 #include <fstream>
 using namespace std;
 void createDict();
-string toBinary(int);
+//string toBinary(int);

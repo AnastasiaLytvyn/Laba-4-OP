@@ -6,7 +6,49 @@
 #include "dictionary.h"
 using namespace std;
 
+char* toBinary(int num) {
+	int res = num;
+	string str1 = "";
+	string str2 = "";
+	while (res != 1 && res != 0) {
+		if (res % 2 == 0) {
+			res = num / 2;
+			num = res;
+			str1 += "0";
+		}
+		else {
+			res = num / 2;
+			num = res;
 
+			str1 += "1";
+		}
+	}
+	str1 += to_string(res);
+	for (int i = str1.length(); i >= 0; i--) {
+		str2 += str1[i];
+	}
+	char* binNum = new char[str2.length()];
+	for (int i = 0; i < str2.length(); i++)
+	{
+		binNum[i] = str2[i];
+	}
+	return binNum;
+}
+
+unsigned char GetByte(const char data[])
+{
+	unsigned char byte = 0;
+	const char* end = data + 8;
+
+	for (; *data && (data < end); ++data)
+	{
+		byte <<= 1;
+
+		byte |= (*data == '1') ? 1 : 0;
+	}
+
+	return byte;
+}
 
 int main(int argc, char* argv[])
 {
@@ -118,6 +160,29 @@ int main(int argc, char* argv[])
 						char symm = newSymbol;
 						binFile.write((char*)&symm, sizeof(symm));
 					}
+					//считывание новых значений с словаря
+					//if (newSymbol >=256)
+					//{
+					//	newSymbol += 31;
+					//	char* data = toBinary(newSymbol);
+					//	char output_byte = 0;
+					//	for (int k = 0; k< 8; k++)
+					//	{
+					//		output_byte |= data[k] << (7 - k);
+					//	}
+					//	binFile.write((char*)&output_byte, sizeof(output_byte));
+
+					//	//char symm = newSymbol;
+					//	//const size_t nData = sizeof(data) - 1;
+					//	//const char* array = data;
+					//	//while (array - data < nData)
+					//	//{
+					//	//	unsigned char byte = GetByte(array);
+					//	//	binFile.write((char*)&byte, sizeof(byte));
+					//	//	//fwrite(&byte, 1, 1, binFile);
+					//	//	array += 8;
+					//	//}
+					//}
 				}
 			}
 			binFile.close();
