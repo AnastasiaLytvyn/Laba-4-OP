@@ -1,3 +1,4 @@
 ﻿  project4.cpp
-C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\project4\project4.cpp(56,23): warning C4018: <: несоответствие типов со знаком и без знака
-  project4.vcxproj -> C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\Debug\project4.exe
+C:\Users\litvi\labs\n4\project4\project4\project4.cpp(56,23): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\litvi\labs\n4\project4\project4\project4.cpp(103,13): warning C4018: <: несоответствие типов со знаком и без знака
+  project4.vcxproj -> C:\Users\litvi\labs\n4\project4\Debug\project4.exe

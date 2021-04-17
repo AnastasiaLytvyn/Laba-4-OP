@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 				dict[str.substr(0, 1)] = str.substr(4);
 			}
 		}
-		dict["\n"] = to_string(223);
+		dict["\n"] = to_string(224);
 		
 		/*for (int i = 0; it != dict.end(); it++, i++) {
 			cout << it->first << " -> " << it->second << endl;
@@ -34,12 +34,12 @@ int main(int argc, char* argv[])
 
 	//createDict();
 	map <string, string>::iterator it = dict.begin();
-	string str1 = argv[1];//compress/decompress/err
-	//string str1 = "--compress";
+	//string str1 = argv[1];//compress/decompress/err
+	string str1 = "--compress";
 	if (str1 == "--compress") {
 		string path = "../project4/";
-		string pathFile = path + argv[2];
-		//string pathFile = path + "file.txt";
+		//string pathFile = path + argv[2];
+		string pathFile = path + "file.txt";
 		ifstream f(pathFile);
 		if (!f.is_open()) {
 			cout << "No such file";
@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 			string P = "", C, PnC;
 			string result;
 			int bytesnum = 0;
-			int counter = 223;
+			int counter = 224;
 			while (!f.eof()) {
 				getline(f, str);
 				str = str + "\n";
@@ -89,6 +89,38 @@ int main(int argc, char* argv[])
 			for (int i = 0; it != dict.end(); it++, i++) {
 				cout << it->first << " -> " << it->second << endl;
 			}
+
+
+			///////
+			ofstream binFile("../project4/binaryfile.txt", ios::binary);
+			if (!binFile.is_open())
+			{
+				cout << "No such file";
+			}
+			else
+			{
+				int i = 0;
+				while (i<result.length())
+				{
+					string symbol;
+					symbol = result.substr(i, result.find(" "));
+					result = result.substr(result.find(" ") + 1);
+					int newSymbol = stoi(symbol);
+					if (newSymbol != 224 && newSymbol<256)
+					{
+						newSymbol += 32;
+						char symm = newSymbol;
+						binFile.write((char*)&symm, sizeof(symm));
+					}
+					if (newSymbol == 224)
+					{
+						newSymbol =10;
+						char symm = newSymbol;
+						binFile.write((char*)&symm, sizeof(symm));
+					}
+				}
+			}
+			binFile.close();
 		}
 	}
 	else if (str1 == "--decompress") {
