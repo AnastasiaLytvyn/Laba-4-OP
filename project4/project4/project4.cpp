@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 {
 	setlocale(LC_CTYPE, "rus");
 	
-	Archiver zipper;
+	RLEArchiver zipper;
 	//createDict();
 	
 	//string str1 = argv[1];//compress/decompress/err

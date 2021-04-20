@@ -4,7 +4,7 @@
 #include <map>
 #include <fstream>
 using namespace std;
-class Archiver
+class RLEArchiver
 {
 
 public:
