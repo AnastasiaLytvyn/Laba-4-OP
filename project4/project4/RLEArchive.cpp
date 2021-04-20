@@ -1,10 +1,9 @@
 #include "RLEArchive.h"
 
-//проверить для перехода на новую строку
 bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
-	cout << "Сompressing  " << from << " ... ";
+	cout << "Сompressing  " << from << " ...\n";
 	char now;
 	input.read((char*)&now, 1);
 	int countS;
@@ -26,7 +25,7 @@ bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <
 		}
 		else {
 			int countS1 = countS >> 8;
-			int countS2 = countS & ((1 <<12) - 1);
+			int countS2 = countS & ((1 << 8) - 1);
 			char countChar1 = countS1;
 			char countChar2 = countS2;
 			char twoBytesAlert = 27;
@@ -36,7 +35,47 @@ bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <
 		}
 		output.write((char*)&now, 1);
 		now = current;
-		//1They => i=0; last=1	
+	}
+	char lastCount = 1;
+	output.write((char*)&lastCount, 1);
+	output.write((char*)&now, 1);
+
+	return true;
+}
+
+
+bool RLEArchiver::Decompress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
+	ifstream input(from, ios::binary);
+	ofstream output(to, ios::binary);
+
+	char now;
+	char symbol;
+	while (input.read((char*)&now, 1))
+	{
+		if (now != 27)
+		{
+			input.read((char*)&symbol, 1);
+			for (int i = 0; i < now; i++)
+			{
+				output.write((char*)&symbol, 1);
+			}
+		}
+		else
+		{
+			char highByte, lowByte;
+			input.read((char*)&highByte, 1);
+			int highB, lowB;
+			highB = (highByte) << 8;
+			input.read((char*)&lowByte, 1);
+			lowB = lowByte;
+			int countSym;
+			countSym = highB + lowB;
+			input.read((char*)&symbol, 1);
+			for (int i = 0; i < countSym; i++)
+			{
+				output.write((char*)&symbol, 1);
+			}
+		}
 	}
 	return true;
 }
