@@ -12,24 +12,25 @@ Archive::Archive() {
 string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, string>::iterator it) {
 	
 	ifstream f(pathFile, ios::binary);
+	ofstream output("output.lzw", ios::out | ios::binary);
 	if (!f.is_open()) {
 		cout << "No such file";
 		return "";
 	}
 	else {
-
-
 		string str = "";
 		string P = "", PnC;
 		char C;
 		string result;
 		int bytesnum = 0;
 		int counter = 255;
-		while (!f.eof()) {
+		f.read((char*)&C, 1);
+		P += C;
+		//while (f.read((char*)&C,1))
+		{
 			getline(f, str);
-
 			for (int i = 0; i < str.length(); i++) {
-				C = f.get();
+				f.read((char*)&C, 1);
 				PnC = P + C;
 				if (dict.count(PnC) == 1) {
 					P = PnC;
@@ -38,6 +39,9 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 				else {
 					dict[PnC] = to_string(++counter);
 					it = dict.find(P);
+					int bytes = stoi((it->second));
+					char code=bytes;
+					output.write((char*)&code, sizeof(code));
 					result += it->second;
 					result += " ";
 					bytesnum++;
@@ -46,6 +50,9 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 			}
 			if (str.substr(str.length() - 1, 1) != "\n") {
 				it = dict.find(str.substr(str.length() - 1, 1));
+				int bytes = stoi((it->second));
+				char code = bytes;
+				output.write((char*)&code, sizeof(code));
 				result += it->second;
 				bytesnum++;
 			}

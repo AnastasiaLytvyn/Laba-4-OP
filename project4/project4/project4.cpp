@@ -4,12 +4,67 @@
 #include <map>
 #include <iomanip>
 #include "dictionary.h"
-#include "Archive.h"
+#include "RLEArchive.h"
+
 using namespace std;
 
+
+map <string, int> createMapFromDict() {
+	map <string, int> dict;
+
+	ifstream dictF("../project4/dict.txt");
+	if (!dictF.is_open()) {
+		cout << "No such file";
+	}
+	else {
+		string str;
+		while (!dictF.eof()) {
+			getline(dictF, str);
+			if (str != "") {
+				dict[str.substr(0, 1)] = stoi(str.substr(4));
+			}
+		}
+		dict["\n"] = 10;
+		/*for (int i = 0; it != dict.end(); it++, i++) {
+			cout << it->first << " -> " << it->second << endl;
+		}*/
+	}
+	dictF.close();
+	return dict;
+}
+
+
+
+int main(int argc, char* argv[])
+{
+	setlocale(LC_CTYPE, "rus");
+	
+	Archiver zipper;
+	//createDict();
+	
+	//string str1 = argv[1];//compress/decompress/err
+	string str1 = "--compress";
+	if (str1 == "--compress") {
+		string path = "../project4/";
+		//string pathFile = path + argv[3];
+		map <string, int> dict = createMapFromDict();
+		map <string, int>::iterator it = dict.begin();
+		
+		}
+	else if (str1 == "--decompress") {
+		cout << "....";
+
+	}
+	else {
+		cout << "error";
+	}	
+}
+
+
+///
 char* toBinary(int num) {
 	int res = num;
-	string str1 = "",str2 = "";
+	string str1 = "", str2 = "";
 	while (res != 1 && res != 0) {
 		if (res % 2 == 0) {
 			res = num / 2;
@@ -48,61 +103,4 @@ unsigned char GetByte(const char data[])
 	}
 
 	return byte;
-}
-map <string, string> createMapFromDict() {
-	map <string, string> dict;
-
-	ifstream dictF("../project4/dict.txt");
-	if (!dictF.is_open()) {
-		cout << "No such file";
-	}
-	else {
-		string str;
-		while (!dictF.eof()) {
-			getline(dictF, str);
-			if (str != "") {
-				dict[str.substr(0, 1)] = str.substr(4);
-			}
-		}
-		dict["\n"] = to_string(10);
-
-		/*for (int i = 0; it != dict.end(); it++, i++) {
-			cout << it->first << " -> " << it->second << endl;
-		}*/
-	}
-	dictF.close();
-	return dict;
-}
-
-int main(int argc, char* argv[])
-{
-	setlocale(LC_CTYPE, "rus");
-	
-	Archive zipper;
-	//createDict();
-	
-	string str1 = argv[1];//compress/decompress/err
-	//string str1 = "--compress";
-	if (str1 == "--compress") {
-		string path = "../project4/";
-		string pathFile = path + argv[3];
-		map <string, string> dict = createMapFromDict();
-		map <string, string>::iterator it = dict.begin();
-		string result = zipper.LZWAlgo(dict, pathFile, it);
-		//cout << result<<endl<<endl;
-		//zipper.displayNewDict(dict, it);
-
-		//string outputFile = argv[2];
-		//string pathOutput = path + outputFile;
-
-		//zipper.Compress(result, pathOutput);
-		
-		}
-	else if (str1 == "--decompress") {
-		cout << "....";
-
-	}
-	else {
-		cout << "error";
-	}	
 }
