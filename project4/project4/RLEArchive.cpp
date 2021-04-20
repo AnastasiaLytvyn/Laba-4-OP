@@ -3,7 +3,9 @@
 bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
-	cout << "Ñompressing  " << from << " ...\n";
+	string fromFile = from.substr(from.rfind('/')+1);
+	string toFile = to.substr(from.rfind('/') + 1);
+	cout << "Ñompressing " << fromFile << "... ";
 	char now;
 	input.read((char*)&now, 1);
 	int countS;
@@ -33,13 +35,18 @@ bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <
 			output.write((char*)&countChar1, 1);
 			output.write((char*)&countChar2, 1);
 		}
-		output.write((char*)&now, 1);
+		output.write((char*)&now, sizeof(now));
 		now = current;
 	}
-	char lastCount = 1;
-	output.write((char*)&lastCount, 1);
-	output.write((char*)&now, 1);
 
+	if (from.substr(from.rfind('.')) == ".bmp") {
+		char sym1 = 1;
+		output.write((char*)&sym1, sizeof(sym1));
+		output.write((char*)&now, sizeof(now));
+	}
+	cout << "Done." << endl;
+	cout << "Result written to " << toFile << ".";
+	input.close(); output.close();
 	return true;
 }
 
@@ -47,7 +54,9 @@ bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <
 bool RLEArchiver::Decompress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
-
+	string fromFile = from.substr(from.rfind('/')+1);
+	string toFile = to.substr(from.rfind('/') + 1);
+	cout << "Decompressing file " << fromFile<< "... ";
 	char now;
 	char symbol;
 	while (input.read((char*)&now, 1))
@@ -77,5 +86,8 @@ bool RLEArchiver::Decompress(string from, string to, map <string, int> dict, map
 			}
 		}
 	}
+	cout << "Done." << endl;
+	cout << "Result written to " << toFile << ".";
+	input.close(); output.close();
 	return true;
 }
