@@ -6,8 +6,7 @@
 using namespace std;
 class RLEArchiver
 {
-
 public:
-	bool Compress(string, string, map <string, int>, map <string, int>::iterator);
-	bool Decompress(string, string, map <string, int>, map <string, int>::iterator);
+	bool Compress(string, string);
+	bool Decompress(string, string);
 };

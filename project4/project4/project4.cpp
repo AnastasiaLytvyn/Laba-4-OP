@@ -3,51 +3,21 @@
 #include <fstream>
 #include <map>
 #include <iomanip>
-#include "dictionary.h"
 #include "RLEArchive.h"
 
 using namespace std;
-
-
-map <string, int> createMapFromDict() {
-	map <string, int> dict;
-
-	ifstream dictF("../project4/dict.txt");
-	if (!dictF.is_open()) {
-		cout << "No such file";
-	}
-	else {
-		string str;
-		while (!dictF.eof()) {
-			getline(dictF, str);
-			if (str != "") {
-				dict[str.substr(0, 1)] = stoi(str.substr(4));
-			}
-		}
-		dict["\n"] = 10;
-		/*for (int i = 0; it != dict.end(); it++, i++) {
-			cout << it->first << " -> " << it->second << endl;
-		}*/
-	}
-	dictF.close();
-	return dict;
-}
-
-
 
 int main(int argc, char* argv[])
 {
 	setlocale(LC_CTYPE, "rus");
 
 	RLEArchiver zipper;
-	map <string, int> dict = createMapFromDict();
-	map <string, int>::iterator it = dict.begin();
 	string str1 = argv[1];
 	string path = "../project4/";
 	if (str1 == "--compress") {
 		string from = path + argv[3];
 		string to = path + argv[2];
-		if (!zipper.Compress(from,to,dict, it)) {
+		if (!zipper.Compress(from,to)) {
 			cout << "Something went wrong." << endl;
 		}
 		//____________________________________________________________
@@ -82,7 +52,7 @@ int main(int argc, char* argv[])
 	else if (str1 == "--decompress") {
 		string from = path + argv[2];
 		string to = path + argv[3];
-		if (!zipper.Decompress(from, to, dict, it)) {
+		if (!zipper.Decompress(from, to)) {
 			cout << "Something went wrong." << endl;
 		}
 

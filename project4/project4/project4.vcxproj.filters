@@ -18,9 +18,6 @@
     <ClCompile Include="project4.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="dictionary.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Archive.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -29,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dictionary.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="Archive.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>

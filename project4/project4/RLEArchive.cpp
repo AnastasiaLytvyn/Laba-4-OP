@@ -1,6 +1,6 @@
 #include "RLEArchive.h"
 
-bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
+bool RLEArchiver::Compress(string from, string to) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
 	string fromFile = from.substr(from.rfind('/')+1);
@@ -51,7 +51,7 @@ bool RLEArchiver::Compress(string from, string to, map <string, int> dict, map <
 }
 
 
-bool RLEArchiver::Decompress(string from, string to, map <string, int> dict, map <string, int>::iterator it) {
+bool RLEArchiver::Decompress(string from, string to) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
 	string fromFile = from.substr(from.rfind('/')+1);
@@ -91,3 +91,4 @@ bool RLEArchiver::Decompress(string from, string to, map <string, int> dict, map
 	input.close(); output.close();
 	return true;
 }
+

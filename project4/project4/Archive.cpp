@@ -6,11 +6,7 @@
 #include "Archive.h"
 using namespace std;
 
-Archive::Archive() {
-
-}
-string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, string>::iterator it) {
-	
+string Archive::LZWAlgo(string pathFile) {
 	ifstream f(pathFile, ios::binary);
 	ofstream output("output.lzw", ios::out | ios::binary);
 	if (!f.is_open()) {
@@ -18,6 +14,9 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 		return "";
 	}
 	else {
+		//createDict();  //---ÑÎÇÄÀÍÈÅ ÔÀÉËÀ ÑËÎÂÀÐß
+		map<string, int> dict = createMapFromDict();
+		map<string, int>::iterator it = dict.begin();
 		string str = "";
 		string P = "", PnC;
 		char C;
@@ -37,9 +36,9 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 					continue;
 				}
 				else {
-					dict[PnC] = to_string(++counter);
+					dict[PnC] = ++counter;
 					it = dict.find(P);
-					int bytes = stoi((it->second));
+					int bytes = (it->second);
 					char code=bytes;
 					output.write((char*)&code, sizeof(code));
 					result += it->second;
@@ -50,7 +49,7 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 			}
 			if (str.substr(str.length() - 1, 1) != "\n") {
 				it = dict.find(str.substr(str.length() - 1, 1));
-				int bytes = stoi((it->second));
+				int bytes = (it->second);
 				char code = bytes;
 				output.write((char*)&code, sizeof(code));
 				result += it->second;
@@ -62,61 +61,42 @@ string Archive::LZWAlgo(map<string, string> dict, string pathFile, map <string, 
 	}
 	
 }
-void Archive::displayNewDict(map<string, string> dict, map <string, string>::iterator it) {
+void Archive::displayNewDict(map<string, int> dict, map <string, int>::iterator it) {
 	cout << endl << "NEW DICTIONARY:  " << endl;
 		it = dict.begin();
 		for (int i = 0; it != dict.end(); it++, i++) {
 			cout << it->first << " -> " << it->second << endl;
 		}
 }
-void Archive::Compress(string result, string path) {
 
-ofstream output(path, ios::binary);
-if (!output.is_open())
-{
-	cout << "No such file";
-}
-else
-{
-	string symbol;
-	int IntSymbol;
-	while (0<result.length())
-	{
-		symbol = result.substr(0, result.find(" "));
-		result = result.substr(result.find(" ") + 1);
-		IntSymbol = stoi(symbol);
-		
-			char symm = (char)IntSymbol;
-			output.write((char*)&symm, sizeof(symm));
-		
-		
-		//ñ÷èòûâàíèå íîâûõ çíà÷åíèé ñ ñëîâàðÿ
-		//if (IntSymbol >=256)
-		//{
-		//	char* data = toBinary(IntSymbol);
-		//	char output_byte = 0;
-		//	for (int k = 0; k< 8; k++)
-		//	{
-		//		output_byte |= data[k] << (7 - k);
-		//	}
-		//	output.write((char*)&output_byte, sizeof(output_byte));
-
-		//	//char symm = IntSymbol;
-		//	//const size_t nData = sizeof(data) - 1;
-		//	//const char* array = data;
-		//	//while (array - data < nData)
-		//	//{
-		//	//	unsigned char byte = GetByte(array);
-		//	//	output.write((char*)&byte, sizeof(byte));
-		//	//	//fwrite(&byte, 1, 1, output);
-		//	//	array += 8;
-		//	//}
-		//}
+void Archive::createDict() {
+	ofstream fOut("../project4/dict.txt");
+	if (!fOut.is_open()) {
+		cout << "err";
+	}
+	else {
+		for (int i = 32; i < 256; i++) {
+			fOut << (char)(i) << " ->" << i << endl;
+		}
 	}
 }
-	output.close();
-	ifstream input(path, ios::binary);
-	string str; getline(input, str);
-	getline(input, str);
-	cout << "LINE:-> " << str[2] << " -> "<<str[3]<<" -> "<<str[4];
+
+map <string, int> Archive::createMapFromDict() {
+	map <string, int> dict;
+	ifstream dictF("../project4/dict.txt");
+	if (!dictF.is_open()) {
+		cout << "No such file";
+	}
+	else {
+		string str;
+		while (!dictF.eof()) {
+			getline(dictF, str);
+			if (str != "") {
+				dict[str.substr(0, 1)] = stoi(str.substr(4));
+			}
+		}
+		dict["\n"] = 10;
+	}
+	dictF.close();
+	return dict;
 }

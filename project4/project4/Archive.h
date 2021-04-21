@@ -8,11 +8,11 @@ using namespace std;
 
 class Archive
 {
+private:
+	void createDict();
+	map <string, int> createMapFromDict();
 public:
-	Archive();
-	string LZWAlgo(map<string,string>, string, map <string, string>::iterator);
-	void displayNewDict(map<string, string> dict, map <string, string>::iterator);
-	void Compress(string, string);
+	string LZWAlgo(string);
+	void displayNewDict(map<string, int> dict, map <string, int>::iterator);
 	void Decompress();
-
 };
