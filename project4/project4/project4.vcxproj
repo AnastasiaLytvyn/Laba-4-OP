@@ -139,12 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Archive.cpp" />
+    <ClCompile Include="ArchiveLZW.cpp" />
     <ClCompile Include="project4.cpp" />
     <ClCompile Include="RLEArchive.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Archive.h" />
+    <ClInclude Include="ArchiveLZW.h" />
     <ClInclude Include="RLEArchive.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,18 +18,18 @@
     <ClCompile Include="project4.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Archive.cpp">
+    <ClCompile Include="RLEArchive.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="RLEArchive.cpp">
+    <ClCompile Include="ArchiveLZW.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Archive.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="RLEArchive.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="ArchiveLZW.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
