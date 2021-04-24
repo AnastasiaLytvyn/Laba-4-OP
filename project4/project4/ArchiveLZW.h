@@ -12,7 +12,8 @@ private:
 	void createDict();
 	map <string, int> createMapFromDict();
 public:
-	string LZWAlgo(string);
+	bool Compress(string,string);
 	void displayNewDict(map<string, int> dict, map <string, int>::iterator);
-	void Decompress();
+	bool Decompress(string, string);
+	string findInMap(map <string, int>, map <string, int>::iterator, int );
 }; 

@@ -1,20 +1,22 @@
 #include "ArchiveLZW.h"
 
-string ArchiveLZW::LZWAlgo(string pathFile) {
+bool ArchiveLZW::Compress(string pathFile, string to) {
 	ifstream f(pathFile, ios::binary);
-	ofstream output("output.lzw", ios::out | ios::binary);
+	ofstream output(to, ios::binary);
 	if (!f.is_open()) {
 		cout << "No such file";
-		return "";
+		return false;
 	}
 	else
 	{
+		cout << "Compressing file " << pathFile <<"to file "<< to << " ..." ;
 		//createDict();  //---ÑÎÇÄÀÍÈÅ ÔÀÉËÀ ÑËÎÂÀÐß
 		map<string, int> dict = createMapFromDict();
 		map<string, int>::iterator it = dict.begin();
 		string str = "";
 		string P = "", PnC;
 		char C;
+		
 		string result;
 		int bytesnum = 0;
 		int counter = 255;
@@ -58,57 +60,105 @@ string ArchiveLZW::LZWAlgo(string pathFile) {
 				bytesnum++;
 				P = C;
 			}
-			/*if (str.substr(str.length() - 1, 1) != "\n")
-			{
-				it = dict.find(str.substr(str.length() - 1, 1));
-				int bytes = (it->second);
-				if (bytes < 256)
-				{
-					char nullbyte = 0;
-					char code = bytes;
-					output.write((char*)&nullbyte, sizeof(nullbyte));
-					output.write((char*)&code, sizeof(code));
-				}
-				else
-				{
-					int highByte = bytes >> 8;
-					int lowByte = bytes & ((1 << 8) - 1);
-					output.write((char*)&highByte, sizeof(highByte));
-					output.write((char*)&lowByte, sizeof(lowByte));
-				}
-				result += it->second;
-				bytesnum++;
-			}*/
+			
 		}
-		cout << result;
-		cout << endl << endl << bytesnum << endl << endl;
-		return result;
+		it= dict.find(P);
+		int symCode = it->second;//258
+		if (symCode < 256) {
+			char nullbyte = 0;
+			char code = symCode;
+			output.write((char*)&nullbyte, sizeof(nullbyte));
+			output.write((char*)&code, sizeof(code));
+		}
+		else {
+			int highByte = symCode >> 8;
+			int lowByte = symCode & ((1 << 8) - 1);
+			char highB = highByte;
+			char lowB = lowByte;
+			output.write((char*)&highB, sizeof(highB));
+			output.write((char*)&lowB, sizeof(lowB));
+		}
+		//displayNewDict(dict, it);
+		
+		cout << "Done."<<endl;
+		return true;
 	}
 }
 
 
-void ArchiveLZW::Decompress()
+bool ArchiveLZW::Decompress(string path, string to)
 {
-	ifstream output("output.lzw", ios::binary);
-	ofstream final("decompress.txt", ios::binary);
-
+	cout << "Decompressing file " << path << " to " << to << " ...";
+	string resultSTR = "";
+	ifstream output(path, ios::binary);
+	ofstream result(to, ios::binary);
+	map<string, int> dict = createMapFromDict();
+	map<string, int>::iterator it = dict.begin();
+	int counter = 255;
 	if (!output.is_open()) {
 		cout << "No such file";
-		return;
+		return false;
 	}
 	else
 	{
-		char now;
-		char next;
-		while (output.read((char*)&now, 1))
-		{
-			int symbolnow, symbolnext, bytes;
-			symbolnow = now << 8;
-			output.read((char*)&next, 1);
-			symbolnext = next;
-			bytes = symbolnow + symbolnext;
+		unsigned char CHAR;
+		int highByte, lowByte;
+		output.read((char*)&CHAR, sizeof(CHAR));
+		highByte = (int)CHAR;
+		highByte = highByte << 8;
+		output.read((char*)&CHAR, sizeof(CHAR));
+		lowByte = (int)CHAR;
+		int codeword = highByte + lowByte;
+		string sym1;
+		
+		for (; it != dict.end(); it++) {
+			if (it->second == codeword) {
+				sym1 = it->first;
+				break;
+			}
+		}
+		for (int i = 0; i < sym1.length(); i++) {
+		result.write((char*)&sym1[i], 1);
+		resultSTR += sym1[i];
+		}
+		string priorCodeword = sym1;
+		string codewordStr;
+		while (output.read((char*)&CHAR, sizeof(CHAR))) {
+			highByte = (int)CHAR;
+			highByte = highByte << 8;
+			output.read((char*)&CHAR, sizeof(CHAR));
+			lowByte = (int)CHAR;
+			codeword = highByte + lowByte;
+			for (it=dict.begin(); it != dict.end(); it++) {
+				if (it->second == codeword) {
+					codewordStr = it->first;
+					break;
+				}
+				else {
+					codewordStr = "";
+				}
+			}
+			if (codewordStr != "") {
+				dict[priorCodeword + codewordStr[0]] = ++counter;
+				for (int i = 0; i < codewordStr.length(); i++) {
+					result.write((char*)&codewordStr[i], 1);
+					resultSTR += codewordStr[i];
+				}
+			}
+			else {
+				string PnF = priorCodeword + priorCodeword[0];
+				dict[PnF]=++counter;
+				for (int i = 0; i < PnF.length(); i++) {
+					result.write((char*)PnF[i], 1);
+					resultSTR += PnF[i];
+				}
+			}
+			priorCodeword = codewordStr;
 		}
 	}
+	//displayNewDict(dict, it);
+	cout << "Done."<<endl;
+	return true;
 }
 
 
@@ -151,3 +201,7 @@ map <string, int> ArchiveLZW::createMapFromDict() {
 	dictF.close();
 	return dict;
 }
+
+
+	
+
