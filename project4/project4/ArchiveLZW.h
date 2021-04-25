@@ -15,5 +15,5 @@ public:
 	bool Compress(string,string);
 	void displayNewDict(map<string, int> dict, map <string, int>::iterator);
 	bool Decompress(string, string);
-	string findInMap(map <string, int>, map <string, int>::iterator, int );
+	//string findInMap(map <string, int>, map <string, int>::iterator, int );
 }; 

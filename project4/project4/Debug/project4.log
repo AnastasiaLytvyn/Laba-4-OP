@@ -1,7 +1,1 @@
-﻿  ArchiveLZW.cpp
-C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\project4\ArchiveLZW.cpp(120,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\project4\ArchiveLZW.cpp(143,23): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\project4\ArchiveLZW.cpp(151,23): warning C4018: <: несоответствие типов со знаком и без знака
-  project4.cpp
-  Создание кода...
-  project4.vcxproj -> C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\Debug\project4.exe
+﻿  project4.vcxproj -> C:\Users\litvi\labs\n4\project4\Debug\project4.exe

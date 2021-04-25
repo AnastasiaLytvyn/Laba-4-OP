@@ -18,20 +18,23 @@ int main(int argc, char* argv[])
 	//string filePath = "../project4/.lzw";
 	//zipper.Decompress(filePath, to);
 
-	string str1 = argv[1];
+	//string str1 = argv[1];
 	string path = "../project4/";
+	string str1 = "--decompress";
 	if (str1 == "--compress") {
-		string from = path + argv[3];
-		string to = path + argv[2];
+		//string from = path + argv[3];
+		//string to = path + argv[2];
+		string from = path + "sample.pdf";
+		string to = path +"compressedddddddPDF.lzw";
 		if (!zipper.Compress(from,to)) {
 			cout << "Something went wrong." << endl;
 		}
-
-
 	}
 	else if (str1 == "--decompress") {
-		string from = path + argv[2];
-		string to = path + argv[3];
+		string from = path + "compressedddddddPDF.lzw";
+		string to = path + "decompressPDF.pdf";
+		/*string from = path + argv[2];
+		string to = path + argv[3];*/
 		if (!zipper.Decompress(from, to)) {
 			cout << "Something went wrong." << endl;
 		}
