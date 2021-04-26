@@ -12,14 +12,14 @@ int main(int argc, char* argv[])
 	setlocale(LC_CTYPE, "rus");
 
 	RLEArchiver zipper;
-	//string str1 = argv[1];
+	string str1 = argv[1];
 	string path = "../project4/";
-	string str1 = "--decompress";
+	//string str1 = "--decompress";
 	if (str1 == "--compress") {
-		//string from = path + argv[3];
-		//string to = path + argv[2];
-		string from = path + "dop.txt";
-		string to = path + "dop.rle";
+		string from = path + argv[3];
+		string to = path + argv[2];
+		//string from = path + "dop.txt";
+		//string to = path + "dop.rle";
 		if (!zipper.Compress(from,to)) {
 			cout << "Something went wrong." << endl;
 		}
@@ -53,10 +53,10 @@ int main(int argc, char* argv[])
 
 	}
 	else if (str1 == "--decompress") {
-		//string from = path + argv[2];
-		//string to = path + argv[3];
-		string to = path + "dop111.txt";
-		string from = path + "dop.rle";
+		string from = path + argv[2];
+		string to = path + argv[3];
+		//string to = path + "dop111.txt";
+		//string from = path + "dop.rle";
 		if (!zipper.Decompress(from, to)) {
 			cout << "Something went wrong." << endl;
 		}
