@@ -63,7 +63,6 @@ bool RLEArchiver::Compress(string from, string to) {
 			else {
 				char one = 1;
 				output.write((char*)&one, sizeof(first));
-
 				output.write((char*)&first, sizeof(first));
 				output.write((char*)&second, sizeof(second));
 				output.write((char*)&third, sizeof(third));
@@ -119,16 +118,32 @@ bool RLEArchiver::Decompress(string from, string to) {
 	string fromFile = from.substr(from.rfind('/')+1);
 	string toFile = to.substr(from.rfind('/') + 1);
 	cout << "Decompressing file " << fromFile<< "... ";
-	char now;
-	char symbol;
-	while (input.read((char*)&now, 1))
+	char first, second, third;
+	char numBytes;
+	while (input.read((char*)&numBytes, 1))
 	{
-		if (now != 27)
+		if (numBytes != 27) // 27 - два байта, либо 27 повторов
 		{
-			input.read((char*)&symbol, 1);
-			for (int i = 0; i < now; i++)
-			{
-				output.write((char*)&symbol, 1);
+			if (input.read((char*)&first, 1)) {
+				if (input.read((char*)&second, 1)) {
+					if (input.read((char*)&third, 1)) {
+						for (int i = 0; i < numBytes; i++) {
+							output.write((char*)&first, 1);
+							output.write((char*)&second, 1);
+							output.write((char*)&third, 1);
+						}
+					}
+					else {
+						output.write((char*)&first, 1);
+						output.write((char*)&second, 1);
+					}
+				}
+				else {
+					output.write((char*)&first, 1);
+				}
+			}
+			else {
+				break;
 			}
 		}
 		else
@@ -141,10 +156,27 @@ bool RLEArchiver::Decompress(string from, string to) {
 			lowB = lowByte;
 			int countSym;
 			countSym = highB + lowB;
-			input.read((char*)&symbol, 1);
-			for (int i = 0; i < countSym; i++)
-			{
-				output.write((char*)&symbol, 1);
+			
+			if (input.read((char*)&first, 1)) {
+				if (input.read((char*)&second, 1)) {
+					if (input.read((char*)&third, 1)) {
+						for (int i = 0; i < countSym; i++) {
+							output.write((char*)&first, 1);
+							output.write((char*)&second, 1);
+							output.write((char*)&third, 1);
+						}
+					}
+					else {
+						output.write((char*)&first, 1);
+						output.write((char*)&second, 1);
+					}
+				}
+				else {
+					output.write((char*)&first, 1);
+				}
+			}
+			else {
+				break;
 			}
 		}
 	}

@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 	RLEArchiver zipper;
 	//string str1 = argv[1];
 	string path = "../project4/";
-	string str1 = "--compress";
+	string str1 = "--decompress";
 	if (str1 == "--compress") {
 		//string from = path + argv[3];
 		//string to = path + argv[2];
@@ -53,8 +53,10 @@ int main(int argc, char* argv[])
 
 	}
 	else if (str1 == "--decompress") {
-		string from = path + argv[2];
-		string to = path + argv[3];
+		//string from = path + argv[2];
+		//string to = path + argv[3];
+		string to = path + "dop111.txt";
+		string from = path + "dop.rle";
 		if (!zipper.Decompress(from, to)) {
 			cout << "Something went wrong." << endl;
 		}
