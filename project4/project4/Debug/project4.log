@@ -1,5 +1,5 @@
 ﻿  RLEArchive.cpp
-C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(63,11): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
-C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(64,12): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
-C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(65,11): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+  project4.cpp
+  Создание кода...
+  LINK : не найден или не выполнена сборка C:\Users\litvi\labs\n4\project4\Debug\project4.exe при последней инкрементной компоновке; выполняется полная компоновка
   project4.vcxproj -> C:\Users\litvi\labs\n4\project4\Debug\project4.exe

@@ -1,56 +1,59 @@
 #include "RLEArchive.h"
 
+
 bool RLEArchiver::Compress(string from, string to) {
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
-	string fromFile = from.substr(from.rfind('/')+1);
+	string fromFile = from.substr(from.rfind('/') + 1);
 	string toFile = to.substr(from.rfind('/') + 1);
-	cout << "Ñompressing " << fromFile << "... ";
-
-
+	cout << "Compressing " << fromFile << "... ";
 	char first, second, third;
 	input.read((char*)&first, 1);
 	input.read((char*)&second, 1);
 	input.read((char*)&third, 1);
+	char curF, curS, curT;
 	int countS;
-	char currentF, currS,currT;
-
-	string emptySym = "";
-	while (input.read((char*)&currentF, 1))
+	string troubleSym = "";
+	while (input.read((char*)&curF, 1))
 	{
-		if (input.read((char*)&currS, 1))
+		if (input.read((char*)&curS, 1))
 		{
-			if (input.read((char*)&currT, 1))
+			if (input.read((char*)&curT, 1))
 			{
 				countS = 1;
-				while (first == currentF && second == currS && third == currT) {
+				while (first == curF && second == curS && third == curT) 
+				{
 					countS++;
-					if (input.read((char*)&currentF, 1)) {
-						if (input.read((char*)&currS, 1)) {
-							if (input.read((char*)&currT, 1)) {
+					if (input.read((char*)&curF, 1))
+					{
+						if (input.read((char*)&curS, 1)) 
+						{
+							if (input.read((char*)&curT, 1))
+							{
 								continue;
 							}
-							else {
-								emptySym = "noT";
+							else 
+							{
+								troubleSym = "thirdSym";
 								break;
 							}
 						}
-						else {
-							emptySym = "noS";
+						else 
+						{
+							troubleSym = "secondSym";
 							break;
 						}
 					}
-					else {
-						//emptySym = "first";
+					else 
 						break;
-
-					}
 				}
-				if (countS < 256) {
+				if (countS < 256) 
+				{
 					char countChar = countS;
 					output.write((char*)&countChar, 1);
 				}
-				else {
+				else 
+				{
 					int countS1 = countS >> 8;
 					int countS2 = countS & ((1 << 8) - 1);
 					char countChar1 = countS1;
@@ -60,87 +63,86 @@ bool RLEArchiver::Compress(string from, string to) {
 					output.write((char*)&countChar1, 1);
 					output.write((char*)&countChar2, 1);
 				}
-				first == currentF;
-				second == currS;
-				third == currT;
-
 				output.write((char*)&first, sizeof(first));
 				output.write((char*)&second, sizeof(second));
 				output.write((char*)&third, sizeof(third));
+				first = curF;
+				second = curS;
+				third = curT;
 			}
 			else {
-				char one = 1;
-				output.write((char*)&one, sizeof(first));
+				char numOfByte = 1;
+				output.write((char*)&numOfByte, sizeof(first));
 				output.write((char*)&first, sizeof(first));
 				output.write((char*)&second, sizeof(second));
 				output.write((char*)&third, sizeof(third));
-				emptySym = "noT";
+				troubleSym = "thirdSym";
 				break;
 			}
 		}
 		else {
-			char one = 1;
-			output.write((char*)&one, sizeof(first));
+			char numOfByte = 1;
+			output.write((char*)&numOfByte, sizeof(first));
 
 			output.write((char*)&first, sizeof(first));
 			output.write((char*)&second, sizeof(second));
 			output.write((char*)&third, sizeof(third));
-			emptySym = "noS";
+			troubleSym = "secondSym";
 			break;
 		}
 	}
-	if (emptySym == "noT")
-	{
-		char one = 1;
+	if (troubleSym == "thirdSym") {
+		char numOfByte = 1;
 		input.seekg(-2, ios::end);
-		input.read((char*)&first, 1);
-		input.read((char*)&second, 1);
-		output.write((char*)&one, sizeof(first));
-		output.write((char*)&first, sizeof(first));
-		output.write((char*)&second, sizeof(second));
-		emptySym = "";
+		input.read((char*)&curF, 1);
+		input.read((char*)&curS, 1);
+		output.write((char*)&numOfByte, sizeof(first));
+		output.write((char*)&curF, sizeof(first));
+		output.write((char*)&curS, sizeof(second));
 	}
-	else
-	{
-		char one = 1;
+	else if (troubleSym == "secondSym") {
+		char numOfByte = 1;
 		input.seekg(-1, ios::end);
-		output.write((char*)&one, sizeof(first));
-		input.read((char*)&first, 1);
-		output.write((char*)&first, sizeof(first));
-		emptySym = "";
+		output.write((char*)&numOfByte, sizeof(first));
+		input.read((char*)&curF, 1);
+		output.write((char*)&curF, sizeof(first));
 	}
 
-
-
-	//if (from.substr(from.rfind('.')) == ".bmp") {
-	//	char sym1 = 1;
-	//	output.write((char*)&sym1, sizeof(sym1));
-	//	output.write((char*)&now, sizeof(now));
-	//}
 	cout << "Done." << endl;
 	cout << "Result written to " << toFile << ".";
 	input.close(); output.close();
 	return true;
 }
 
-
-bool RLEArchiver::Decompress(string from, string to) {
+bool RLEArchiver::Decompress(string from, string to)
+{
 	ifstream input(from, ios::binary);
 	ofstream output(to, ios::binary);
-	string fromFile = from.substr(from.rfind('/')+1);
+	string fromFile = from.substr(from.rfind('/') + 1);
 	string toFile = to.substr(from.rfind('/') + 1);
-	cout << "Decompressing file " << fromFile<< "... ";
+	cout << "Decompressing file " << fromFile << "... ";
+	char first, second, third;
 	char now;
-	char symbol;
 	while (input.read((char*)&now, 1))
 	{
 		if (now != 27)
 		{
-			input.read((char*)&symbol, 1);
-			for (int i = 0; i < now; i++)
-			{
-				output.write((char*)&symbol, 1);
+			input.read((char*)&first, 1);
+			if (input.read((char*)&second, 1)) {
+				if (input.read((char*)&third, 1)) {
+					for (int i = 0; i < now; i++) {
+						output.write((char*)&first, 1);
+						output.write((char*)&second, 1);
+						output.write((char*)&third, 1);
+					}
+				}
+				else {
+					output.write((char*)&first, 1);
+					output.write((char*)&second, 1);
+				}
 			}
+			else
+				output.write((char*)&first, 1);
 		}
 		else
 		{
@@ -152,16 +154,33 @@ bool RLEArchiver::Decompress(string from, string to) {
 			lowB = lowByte;
 			int countSym;
 			countSym = highB + lowB;
-			input.read((char*)&symbol, 1);
-			for (int i = 0; i < countSym; i++)
+
+			input.read((char*)&first, 1);
 			{
-				output.write((char*)&symbol, 1);
+				if (input.read((char*)&second, 1))
+				{
+					if (input.read((char*)&third, 1))
+					{
+						for (int i = 0; i < countSym; i++) 
+						{
+							output.write((char*)&first, 1);
+							output.write((char*)&second, 1);
+							output.write((char*)&third, 1);
+						}
+					}
+					else 
+					{
+						output.write((char*)&first, 1);
+						output.write((char*)&second, 1);
+					}
+				}
+				else 
+					output.write((char*)&first, 1);
 			}
 		}
 	}
-	cout << "Done." << endl;
+	cout << "DnumOfByte." << endl;
 	cout << "Result written to " << toFile << ".";
 	input.close(); output.close();
 	return true;
 }
-

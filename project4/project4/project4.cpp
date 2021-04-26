@@ -12,48 +12,19 @@ int main(int argc, char* argv[])
 	setlocale(LC_CTYPE, "rus");
 
 	RLEArchiver zipper;
-	//string str1 = argv[1];
+	string str1 = argv[1];
 	string path = "../project4/";
-	string str1 = "--compress";
 
 
 
 	if (str1 == "--compress") {
-		//string from = path + argv[3];
-		//string to = path + argv[2];
+		string from = path + argv[3];
+		string to = path + argv[2];
 
-		string from = path + "file.txt";
-		string to = path + "filecomp.rle";
 		if (!zipper.Compress(from,to)) {
 			cout << "Something went wrong." << endl;
 		}
-		//____________________________________________________________
-		//!~~~~~~~~~~~~~~FILEs EXAMPLES FOR COMPRESSING~~~~~~~~~~~~~~!
-		//[‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾]
-		//|=========================================================||
-		//|															||
-		//|                |==================|						||
-		//|===============TXT FILE COMPRESSING======================||
-		//|                |==================|						||
-		//|															||
-		//|			compressTXT.txt   compressTXT.rle				||
-		//|			compressTXT.rle   compressTXTDECOMPRESSED.txt	||
-		//|															||
-		//|                |==================|						||
-		//|================PDF FILE COMPRESSING=====================||
-		//|                |==================|						||
-		//|															||
-		//|			compressPDF.pdf   compressPDF.rle				||
-		//|			compressPDF.rle   compressPDFDECOMPRESSED.pdf	||
-		//|															||
-		//|                |==================|						||
-		//|================BMP FILE COMPRESSING=====================||
-		//|                |==================|						||
-		//|															||
-		//|			compressBMP.bmp   compressBMP.rle				||
-		//|			compressBMP.rle   compressBMPDECOMPRESSED.bmp	||
-		//|=========================================================||
-		//[__________________________________________________________]
+		
 
 	}
 	else if (str1 == "--decompress") {
