@@ -1,2 +1,5 @@
 ﻿  RLEArchive.cpp
-  project4.vcxproj -> C:\Users\Дядя Паша\Desktop\КПІ\ВТОРОЙ_СЕМЕСТР\оп\Лабы\laba4\project4\Debug\project4.exe
+C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(63,11): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(64,12): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+C:\Users\litvi\labs\n4\project4\project4\RLEArchive.cpp(65,11): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+  project4.vcxproj -> C:\Users\litvi\labs\n4\project4\Debug\project4.exe
