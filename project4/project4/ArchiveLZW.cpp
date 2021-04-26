@@ -112,7 +112,6 @@ bool ArchiveLZW::Decompress(string path, string to)
 		lowByte = (int)CHAR;
 		int codeword = highByte + lowByte;
 		string sym1;
-		int numofb = 1;
 		for (; it != dict.end(); it++) {
 			if (it->second == codeword) {
 				sym1 = it->first;
@@ -126,7 +125,6 @@ bool ArchiveLZW::Decompress(string path, string to)
 		string priorCodeword = sym1;
 		string codewordStr;
 		while (output.read((char*)&CHAR, sizeof(CHAR))) {
-			cout << ++numofb << endl;
 
 			highByte = (int)CHAR;
 			highByte = highByte << 8;
@@ -156,7 +154,7 @@ bool ArchiveLZW::Decompress(string path, string to)
 				for (int i = 0; i < PnF.length(); i++) {
 					//cout << ++numofb<<endl;
 
-					result.write((char*)PnF[i], 1);
+					result.write((char*)&PnF[i], 1);
 					resultSTR += PnF[i];
 				}
 			}
